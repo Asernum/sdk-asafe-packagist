@@ -5,7 +5,7 @@ Petite lib **TOTP (RFC 6238)** compatible **Google Authenticator / Authy**.
 ## Installation
 
 ```bash
-composer require ton-org/asafe2fa-php
+composer require sdk-client-asafe-v.1.0
 ```
 
 ## Utilisation
