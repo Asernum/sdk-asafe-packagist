@@ -1,11 +1,11 @@
-# sdk-client-asafe-v.1.0 (PHP)
+# asernum/sdk-client-asafe (PHP)
 
 Petite lib **TOTP (RFC 6238)** compatible **Google Authenticator / Authy**.
 
 ## Installation
 
 ```bash
-composer require sdk-client-asafe-v.1.0
+composer require asernum/sdk-client-asafe
 ```
 
 ## Utilisation
