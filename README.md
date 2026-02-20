@@ -1,16 +1,12 @@
 # asernum/sdk-client-asafe (PHP)
 
-Petite lib **TOTP (RFC 6238)** compatible **Google Authenticator / Authy**.
-
 ## Installation
 
 ```bash
 composer require asernum/sdk-client-asafe
 ```
 
-## Utilisation
-
-### Exemple basique
+### Basic example
 
 ```php
 <?php
@@ -21,71 +17,71 @@ use Asafe2FA\Asafe2FA;
 
 $a2fa = new Asafe2FA();
 
-// Générer une clé secrète (base32)
+// Generate a secret key (base32)
 $secret = $a2fa->generateSecret();
 
-// Créer l’URL OTP Auth pour le scan QR code
+// Create the OTP Auth URL for QR code scanning
 $url = $a2fa->getOtpAuthUrl("alice@example.com", "MyCompany", $secret);
 
-// Obtenir le code OTP actuel
+// Get the current OTP code
 $otp = $a2fa->getCurrentOtp($secret);
 
-// Vérifier le code OTP
+// Verify the OTP code
 $ok = $a2fa->verifyKey($secret, $otp, 1);
 ```
 
-### Comprendre le paramètre `window`
+### Understanding the `window` parameter
 
-Le paramètre `window` dans `verifyKey()` permet de tolérer un léger décalage horaire. Les codes TOTP changent toutes les 30 secondes (par défaut) ; une différence d’horloge entre le serveur et l’appareil de l’utilisateur peut faire échouer la vérification.
+The `window` parameter in `verifyKey()` allows for a small time drift. TOTP codes change every 30 seconds (by default); a clock difference between the server and the user's device can cause verification to fail.
 
-**Fonctionnement :**
-- `window = 0` : n’accepte que le code de la période courante
-- `window = 1` (par défaut) : accepte les codes de la période courante, précédente et suivante (±30 secondes)
-- `window = 2` : accepte les codes sur ±2 périodes (±60 secondes)
+**Behavior:**
+- `window = 0`: accepts only the code for the current period
+- `window = 1` (default): accepts codes for the current, previous, and next period (±30 seconds)
+- `window = 2`: accepts codes over ±2 periods (±60 seconds)
 
-**Exemple :**
+**Example:**
 
 ```php
-// Vérification stricte - uniquement le code actuel
+// Strict verification - current code only
 $strict = $a2fa->verifyKey($secret, $userInput, 0);
 
-// Par défaut - tolérance ±30 secondes (recommandé)
+// Default - ±30 second tolerance (recommended)
 $normal = $a2fa->verifyKey($secret, $userInput, 1);
 
-// Plus souple - tolérance ±60 secondes
+// More lenient - ±60 second tolerance
 $lenient = $a2fa->verifyKey($secret, $userInput, 2);
 ```
 
-**Quand utiliser quelle valeur :**
-- `window = 0` : sécurité maximale (mais peut échouer en cas de décalage d’horloge)
-- `window = 1` : cas général (bon compromis sécurité / utilisabilité)
-- `window = 2` ou plus : si les horloges peuvent être mal synchronisées
+**When to use which value:**
+- `window = 0`: maximum security (but may fail if clocks are out of sync)
+- `window = 1`: general use (good balance of security and usability)
+- `window = 2` or more: when clocks may be poorly synchronized
 
 ## API
 
 ### `generateSecret(length?: int): string`
-Génère une clé secrète aléatoire encodée en base32.
-- `length` : optionnel. Nombre de caractères (défaut : 32, ~160 bits)
+Generates a random secret key encoded in base32.
+- `length`: optional. Number of characters (default: 32, ~160 bits)
 
 ### `getOtpAuthUrl(account: string, issuer: string, secret: string): string`
-Crée une URL `otpauth://` compatible Google Authenticator, Authy et autres apps TOTP.
-- `account` : identifiant utilisateur (ex. adresse email)
-- `issuer` : nom du service (ex. "MyCompany")
-- `secret` : clé secrète générée par `generateSecret()`
+Creates an `otpauth://` URL compatible with Asafe and other TOTP apps.
+- `account`: user identifier (e.g. email address)
+- `issuer`: service name (e.g. "MyCompany")
+- `secret`: secret key from `generateSecret()`
 
 ### `getCurrentOtp(secret: string, options?: array): string`
-Génère le code TOTP actuel pour la clé donnée.
-- `secret` : la clé secrète
-- `options` : configuration TOTP optionnelle (`period`, `digits`, `algorithm`)
+Generates the current TOTP code for the given secret.
+- `secret`: the secret key
+- `options`: optional TOTP configuration (`period`, `digits`, `algorithm`)
 
 ### `verifyKey(secret: string, token: string, window?: int, options?: array): bool`
-Vérifie si un token TOTP est valide.
-- `secret` : la clé secrète
-- `token` : le code OTP à vérifier (saisie utilisateur)
-- `window` : optionnel. Tolérance temporelle en périodes (défaut : 1). Voir [Comprendre le paramètre `window`](#comprendre-le-paramètre-window) ci-dessus
-- `options` : configuration TOTP optionnelle
-- Retourne : `true` si le token est valide, `false` sinon
+Verifies whether a TOTP token is valid.
+- `secret`: the secret key
+- `token`: the OTP code to verify (user input)
+- `window`: optional. Time tolerance in periods (default: 1). See [Understanding the `window` parameter](#understanding-the-window-parameter) above
+- `options`: optional TOTP configuration
+- Returns: `true` if the token is valid, `false` otherwise
 
-## Licence
+## License
 
 MIT
