@@ -1,10 +1,14 @@
 # asernum/sdk-client-asafe (PHP)
 
+TOTP (RFC 6238) library for generating and verifying one-time codes, compatible with Asafe and other TOTP-compatible authenticator apps.
+
 ## Installation
 
 ```bash
 composer require asernum/sdk-client-asafe
 ```
+
+## Usage
 
 ### Basic example
 
