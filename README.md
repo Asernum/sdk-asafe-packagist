@@ -84,7 +84,7 @@ Verifies whether a TOTP token is valid.
 - `token`: the OTP code to verify (user input)
 - `window`: optional. Time tolerance in periods (default: 1). See [Understanding the `window` parameter](#understanding-the-window-parameter) above
 - `options`: optional TOTP configuration
-- Returns: `true` if the token is valid, `false` otherwise
+- Returns: `true` if the token is valid, `false` otherwise.
 
 ## License
 
